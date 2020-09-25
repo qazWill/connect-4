@@ -27,6 +27,14 @@ def __repr__(self):
         s += '\n'
         
         return s
+
+# TODO: compare diff with __repr__
+def printBoard(self):
+	s = ''
+	for row in self.data:
+		for entry in row:
+			print("|" + str(entry))
+		print("|\n")
                                     
 def addMove( self,col,ox ):
         if self.allowsMove(col):
