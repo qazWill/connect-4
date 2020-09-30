@@ -69,7 +69,6 @@ class Board:
             if ret != 0:
                 return ret
         # Check for diagonal of 4
-        #BOOMBOOMBOOM
         arr = np.array(self.data)
         # top-left to bot-right diagonals
         diags = [arr.diagonal(i) for i in range(-self.height+1, self.width)]
