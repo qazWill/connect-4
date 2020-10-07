@@ -12,31 +12,25 @@ class Game:
 		self.grid_img = pygame.image.load('images/grid.png')
 		self.grid_rect = self.grid_img.get_rect()
 		self.light_token_img = pygame.image.load('images/light_token2.png')
-		self.transparent_token_img = pygame.image.load('images/transparent_token.png')
+		self.light_transparent_img = pygame.image.load('images/light_transparent2.png')
+		self.dark_transparent_img = pygame.image.load('images/dark_transparent.png')
 		self.dark_token_img = pygame.image.load('images/dark_token.png')
 		self.back_img = pygame.image.load('images/background.png')
 		self.back_rect = self.back_img.get_rect()
 
 		# keeps track of turn order and players 
-		self.lightToMove = True
+		self.color = 1 
+		self.winner = 0
 		self.lightIsHuman = True
 		self.darkIsHuman = True
-	
+
+
+	# sets up board and runs game loop	
 	def run(self):
 
 
 		# test drops, DELETE
 		self.board = Board(6, 7)
-		self.board.dropToken(0, 1)
-		self.board.dropToken(0, 2)
-		self.board.dropToken(1, 2)
-		self.board.dropToken(1, 1)
-		self.board.dropToken(6, 1)
-		self.board.dropToken(6, 1)
-		self.board.dropToken(6, 1)
-		self.board.dropToken(6, 1)
-		self.board.dropToken(6, 1)
-
 
 		# sets up pygame window
 		pygame.display.set_icon(self.light_token_img)
@@ -53,12 +47,9 @@ class Game:
 					sys.exit()	
 			
 				
-				# mouse click event	
-				if event.type == pygame.MOUSEBUTTONUP:
-				
-					# check to see if mouse is in the grid	
-					if inGrid(event.pos):
-						pass
+				# mouse click event	drop token
+				if event.type == pygame.MOUSEBUTTONDOWN:
+					self.place_token()
 
 			# erase screen
 			screen.fill((255,255,255))
@@ -105,19 +96,14 @@ class Game:
 
 	def draw_potential_move(self, screen):
 
-			
-		# determine which image to use	
-		if self.lightToMove and self.lightIsHuman:
-			pass
-		elif not self.lightToMove and self.darkIsHuman:
-			pass
+		# selects light or dark
+		if self.color == 1:
+			img = self.light_transparent_img
 		else:
-			return
+			img = self.dark_transparent_img
 
 		# gets column 
-		x, y = pygame.mouse.get_pos()
-		size = 82
-		col = int((x - self.grid_rect.left) / size)
+		col = self.col_from_mouse()
 		
 		# gets row
 		if self.board.allowsMove(col):
@@ -129,10 +115,35 @@ class Game:
 			size = 80
 			rect.left = self.grid_rect.left + start + size * col 
 			rect.bottom = self.grid_rect.bottom - start - size * (len(self.board.data) - row - 1)
-			screen.blit(self.transparent_token_img, rect)
+			screen.blit(img, rect)
 		else:
 			return	
-		
+
+	def place_token(self):
+
+		# if winner already found don't allow moves 
+		if self.winner != 0:
+			return
+
+		col = self.col_from_mouse()
+		if self.board.allowsMove(col):
+			self.board.dropToken(col, self.color)
+			if self.color == 1:
+				self.color = 2
+			else:
+				self.color = 1
+			self.winner = self.board.checkWinner()
+			
+
+
+	
+	def col_from_mouse(self):
+
+		x, y = pygame.mouse.get_pos()
+		size = 82
+		col = int((x - self.grid_rect.left) / size)
+		return col
+	
 
 
 
