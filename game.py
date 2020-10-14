@@ -28,6 +28,8 @@ class Game:
 	# sets up board and runs game loop	
 	def run(self):
 
+		# used for rendering text
+		font = pygame.font.SysFont("comicsansms", 34)
 
 		# test drops, DELETE
 		self.board = Board(6, 7)
@@ -58,6 +60,17 @@ class Game:
 			self.draw_background(screen)
 			self.draw_potential_move(screen)
 			self.draw_board(screen)
+
+			# informs users of a winner
+			if self.winner != 0:
+				winner = "Green Wins!"
+				if self.winner == 2:
+					winner = "Black Wins!"
+				txt = font.render(winner, True, (0, 0, 0))
+				rect = txt.get_rect()
+				rect.centerx = screen.get_width() / 2
+				rect.top = 8 
+				screen.blit(txt, rect)
 
 			# displays changes
 			pygame.display.flip()
