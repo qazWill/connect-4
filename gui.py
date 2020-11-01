@@ -1,10 +1,9 @@
 import sys
 import pygame
-from board import Board
 
 pygame.init()
 
-class Game:
+class GUI:
 
 	def __init__(self):
 
@@ -25,92 +24,98 @@ class Game:
 		self.darkIsHuman = True
 
 
-	# sets up board and runs game loop	
-	def run(self):
+		# used for rendering text
+		self.font = pygame.font.SysFont("comicsansms", 34)
+
+		# sets up screen
+		pygame.display.set_icon(self.light_token_img)
+		self.screen = pygame.display.set_mode((800, 600))
+		self.screen.fill((255, 255, 255))	
+
+
+	# event loop for when game is over	
+	def end_menu(self, board):
 
 		# used for rendering text
 		font = pygame.font.SysFont("comicsansms", 34)
 
-		# test drops, DELETE
-		self.board = Board(6, 7)
-
-		# sets up pygame window
-		pygame.display.set_icon(self.light_token_img)
-		screen = pygame.display.set_mode((800, 600))
-		screen.fill((255, 255, 255))	
-		
-
 		# the game loop
-		while True:
+		done = False
+		while not done:
 
 			# the event loop
 			for event in pygame.event.get():
 				if event.type == pygame.QUIT:
 					sys.exit()	
-			
 				
 				# mouse click event	drop token
-				if event.type == pygame.MOUSEBUTTONDOWN:
-					self.place_token()
+				#if event.type == pygame.MOUSEBUTTONDOWN:
+				#	self.place_token()
 
-			# erase screen
-			screen.fill((255,255,255))
 
 			# draws board and tokens
-			self.draw_background(screen)
-			self.draw_potential_move(screen)
-			self.draw_board(screen)
+			self.draw_board(board, 0)
 
-			# informs users of a winner
-			if self.winner != 0:
-				winner = "Green Wins!"
-				if self.winner == 2:
-					winner = "Black Wins!"
-				txt = font.render(winner, True, (0, 0, 0))
-				rect = txt.get_rect()
-				rect.centerx = screen.get_width() / 2
-				rect.top = 8 
-				screen.blit(txt, rect)
 
-			# displays changes
-			pygame.display.flip()
-
-	def draw_background(self, screen):	
+	def draw_background(self):	
 		self.back_rect.left = -400
 		self.back_rect.top = 0
-		screen.blit(self.back_img, self.back_rect)
+		self.screen.blit(self.back_img, self.back_rect)
 	
-	def draw_board(self, screen):
+	def draw_board(self, board, color):
+
+		# erase old screen
+		#self.screen.fill((255,255,255))
+
+		self.draw_background()
+		self.draw_potential_move(board, color)
 
 		# draws the tokens
-		self.grid_rect.center = (int(screen.get_width() / 2), int(screen.get_height() / 2))
+		self.grid_rect.center = (int(self.screen.get_width() / 2), int(self.screen.get_height() / 2))
 		token_rect = self.light_token_img.get_rect()
-		for row in range(0, len(self.board.data)):
-			for col in range(0, len(self.board.data[0])):
+		for row in range(0, len(board.data)):
+			for col in range(0, len(board.data[0])):
 				start = 12
 				size = 80
 				token_rect.left = self.grid_rect.left + start + size * col 
-				token_rect.bottom = self.grid_rect.bottom - start - size * (len(self.board.data) - row - 1)
-				if self.board.data[row][col] == 0:
+				token_rect.bottom = self.grid_rect.bottom - start - size * (len(board.data) - row - 1)
+				if board.data[row][col] == 0:
 					continue
-				elif self.board.data[row][col] == 1:
-					screen.blit(self.light_token_img, token_rect)
+				elif board.data[row][col] == 1:
+					self.screen.blit(self.light_token_img, token_rect)
 				else:
-					screen.blit(self.dark_token_img, token_rect)
-				
+					self.screen.blit(self.dark_token_img, token_rect)
 
 		# draws the grid
-		screen.blit(self.grid_img, self.grid_rect)
+		self.screen.blit(self.grid_img, self.grid_rect)
+
+		# informs users of a winner
+		if self.winner != 0:
+			winner = "Green Wins!"
+			if self.winner == 2:
+				winner = "Black Wins!"
+			txt = self.font.render(winner, True, (0, 0, 0))
+			rect = txt.get_rect()
+			rect.centerx = self.screen.get_width() / 2
+			rect.top = 8 
+			self.screen.blit(txt, rect)
+
+		# displays changes
+		pygame.display.flip()
 
 		'''token_rect.left = self.grid_rect.left
 		token_rect.bottom = self.grid_rect.bottom
 		screen.blit(self.light_token_img, token_rect)'''
 
 
-	def draw_potential_move(self, screen):
+	def draw_potential_move(self, board, color):
+
+		# skip display if no player is moving
+		if color == 0:
+			return
 
 		# selects light or dark
-		if self.color == 1:
+		if color == 1:
 			img = self.light_transparent_img
 		else:
 			img = self.dark_transparent_img
@@ -119,33 +124,38 @@ class Game:
 		col = self.col_from_mouse()
 		
 		# gets row
-		if self.board.allowsMove(col):
-			row = len(self.board.data) - 1
-			while self.board.data[row][col] != 0:
+		if board.allowsMove(col):
+			row = len(board.data) - 1
+			while board.data[row][col] != 0:
 				row -= 1
 			rect = self.light_token_img.get_rect()
 			start = 12
 			size = 80
 			rect.left = self.grid_rect.left + start + size * col 
-			rect.bottom = self.grid_rect.bottom - start - size * (len(self.board.data) - row - 1)
-			screen.blit(img, rect)
+			rect.bottom = self.grid_rect.bottom - start - size * (len(board.data) - row - 1)
+			self.screen.blit(img, rect)
 		else:
 			return	
 
-	def place_token(self):
+
+
+	def place_token(self, board, color):
 
 		# if winner already found don't allow moves 
 		if self.winner != 0:
-			return
+			return False
 
 		col = self.col_from_mouse()
-		if self.board.allowsMove(col):
-			self.board.dropToken(col, self.color)
-			if self.color == 1:
-				self.color = 2
+		if board.allowsMove(col):
+			board.dropToken(col, color)
+			if color == 1:
+				color = 2
 			else:
-				self.color = 1
-			self.winner = self.board.checkWinner()
+				color = 1
+			self.winner = board.checkWinner()
+			return True
+	
+		return False
 			
 
 
