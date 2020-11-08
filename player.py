@@ -1,4 +1,5 @@
 import pygame
+import random
 
 
 '''
@@ -14,6 +15,28 @@ class BasePlayer:
 
 	def play(self, board):
 		return True
+
+
+
+class RandomComputerPlayer:
+
+	def __init__(self, color):
+
+		self.color = color    
+
+	def move(self, board, gui):
+		remainCols = []
+		for x in range(board.width):
+			if board.allowsMove(x):
+				remainCols.append(x)
+
+		if not remainCols:
+			return
+		else:
+			n = random.randint(0,len(remainCols)-1)
+			col = remainCols[n]
+			if board.allowsMove(col):
+				board.dropToken(col, self.color)
 
 
 

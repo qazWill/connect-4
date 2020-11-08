@@ -7,7 +7,8 @@ gui = GUI()
 
 # sets up players
 lightPlayer = HumanPlayer(1)
-darkPlayer = HumanPlayer(2)
+#darkPlayer = HumanPlayer(2)
+darkPlayer = RandomComputerPlayer(2)
 player = lightPlayer
 
 # repeat until winner is found
