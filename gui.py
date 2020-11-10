@@ -153,6 +153,7 @@ class GUI:
 			else:
 				color = 1
 			self.winner = board.checkWinner()
+			print(board.record)
 			return True
 	
 		return False

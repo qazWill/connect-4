@@ -11,6 +11,7 @@ class Board:
         # Data location is of the form data[row][col]
         # From top-left
         self.data = []
+        self.record = []
         # Creat height x width matrix using nested lists
         for row in range(height):
             boardRow = []
@@ -43,6 +44,7 @@ class Board:
     # Drop token id (int) into specified column
     def dropToken(self, col, id):
         if self.allowsMove(col):
+            self.record.append(col)
             for rowN in range(1, self.height):
                 if self.data[rowN][col] != 0:
                     self.data[rowN-1][col] = id
