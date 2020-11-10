@@ -1,3 +1,4 @@
+import sys
 from board import Board
 from player import * 
 from gui import GUI
