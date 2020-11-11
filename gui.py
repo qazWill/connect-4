@@ -15,6 +15,7 @@ class GUI:
 		self.dark_transparent_img = pygame.image.load('images/dark_transparent.png')
 		self.dark_token_img = pygame.image.load('images/dark_token.png')
 		self.back_img = pygame.image.load('images/background.png')
+		self.restart_img = pygame.image.load('images/restart.png')
 		self.back_rect = self.back_img.get_rect()
 
 		# keeps track of turn order and players 
