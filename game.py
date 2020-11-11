@@ -12,19 +12,44 @@ lightPlayer = HumanPlayer(1)
 darkPlayer = RandomComputerPlayer(2)
 player = lightPlayer
 
-# repeat until winner is found
-while board.checkWinner() == 0:
+lightScore = 0
+darkScore = 0
 
-	player.move(board, gui)
+# loop for playing multiple games
+while True:
 
-	# switches player for next move
-	if player == lightPlayer:
-		player = darkPlayer
+	print board
+
+	# repeat until winner is found
+	while board.checkWinner() == 0:
+
+		player.move(board, gui, lightScore, darkScore)
+
+		# switches player for next move
+		if player == lightPlayer:
+			player = darkPlayer
+		else:
+			player = lightPlayer
+
+		gui.draw_board(board, player.color, lightScore, darkScore)
+
+	# updates winner
+	if board.checkWinner() == 1:
+		gui.winner = 1
+		lightScore += 1
 	else:
-		player = lightPlayer
+		gui.winner = 2
+		darkScore += 1
 
-	gui.draw_board(board, player.color)
+	# after game is over show end menu
+	# this will have an option to restart or exit
+	gui.end_menu(board, lightScore, darkScore)
 
-# after game is over show end menu
-# this will have an option to restart or exit
-gui.end_menu(board)
+	# delete old board and make new one
+	# in case user wants to play again
+	board = Board(6, 7)
+	
+	# make new player selections
+	lightPlayer = HumanPlayer(1)
+	darkPlayer = RandomComputerPlayer(2)
+	player = lightPlayer

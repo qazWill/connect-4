@@ -15,7 +15,6 @@ class GUI:
 		self.dark_transparent_img = pygame.image.load('images/dark_transparent.png')
 		self.dark_token_img = pygame.image.load('images/dark_token.png')
 		self.back_img = pygame.image.load('images/background.png')
-		self.restart_img = pygame.image.load('images/restart.png')
 		self.back_rect = self.back_img.get_rect()
 
 		# keeps track of turn order and players 
@@ -23,7 +22,6 @@ class GUI:
 		self.winner = 0
 		self.lightIsHuman = True
 		self.darkIsHuman = True
-
 
 		# used for rendering text
 		self.font = pygame.font.SysFont("comicsansms", 34)
@@ -33,12 +31,13 @@ class GUI:
 		self.screen = pygame.display.set_mode((800, 600))
 		self.screen.fill((255, 255, 255))	
 
+		# restart button
+		self.restart_img = pygame.image.load('images/restart.png')
+		self.restart_rect = self.restart_img.get_rect()
+		self.restart_rect.center = [self.screen.get_width() / 2, self.screen.get_height() / 2]
 
 	# event loop for when game is over	
-	def end_menu(self, board):
-
-		# used for rendering text
-		font = pygame.font.SysFont("comicsansms", 34)
+	def end_menu(self, board, lightScore, darkScore):
 
 		# the game loop
 		done = False
@@ -50,12 +49,24 @@ class GUI:
 					sys.exit()	
 				
 				# mouse click event	drop token
-				#if event.type == pygame.MOUSEBUTTONDOWN:
-				#	self.place_token()
-
+				if event.type == pygame.MOUSEBUTTONDOWN:
+					x, y = event.pos
+					
+					# check to see if restart button is pressed
+					if x > self.restart_rect.left and x < self.restart_rect.right:
+						if y > self.restart_rect.top and y < self.restart_rect.bottom:
+						
+							# restart the game	
+							done = True	
+							self.winner = 0
 
 			# draws board and tokens
-			self.draw_board(board, 0)
+			self.draw_board(board, 0, lightScore, darkScore)
+
+			# draws restart button
+			self.screen.blit(self.restart_img, self.restart_rect)
+			
+			pygame.display.flip()
 
 
 	def draw_background(self):	
@@ -63,7 +74,7 @@ class GUI:
 		self.back_rect.top = 0
 		self.screen.blit(self.back_img, self.back_rect)
 	
-	def draw_board(self, board, color):
+	def draw_board(self, board, color, lightScore, darkScore):
 
 		# erase old screen
 		#self.screen.fill((255,255,255))
@@ -100,6 +111,24 @@ class GUI:
 			rect.centerx = self.screen.get_width() / 2
 			rect.top = 8 
 			self.screen.blit(txt, rect)
+
+		# displays score
+		light_txt = self.font.render(str(lightScore), True, (0, 255, 0))
+		light_rect = light_txt.get_rect()
+		light_rect.left = 20 
+		light_rect.top = self.screen.get_height() / 2 - 100
+		self.screen.blit(light_txt, light_rect)
+		buff_txt = self.font.render("-", True, (0, 0, 0))
+		buff_rect = buff_txt.get_rect()
+		buff_rect.centerx = light_rect.centerx
+		buff_rect.top = light_rect.bottom - 20 
+		self.screen.blit(buff_txt, buff_rect)
+		dark_txt = self.font.render(str(darkScore), True, (0, 0, 0))
+		dark_rect = dark_txt.get_rect()
+		dark_rect.centerx = light_rect.centerx 
+		dark_rect.top = buff_rect.bottom - 20 
+		self.screen.blit(dark_txt, dark_rect)
+		
 
 		# displays changes
 		pygame.display.flip()
@@ -153,7 +182,6 @@ class GUI:
 				color = 2
 			else:
 				color = 1
-			self.winner = board.checkWinner()
 			print(board.record)
 			return True
 	

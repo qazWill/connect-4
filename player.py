@@ -25,7 +25,7 @@ class RandomComputerPlayer:
 
 		self.color = color    
 
-	def move(self, board, gui):
+	def move(self, board, gui, lightScore, darkScore):
 		remainCols = []
 		for x in range(board.width):
 			if board.allowsMove(x):
@@ -50,7 +50,7 @@ class HumanPlayer:
 		self.color = color	
 	
 	
-	def move(self, board, gui):
+	def move(self, board, gui, lightScore, darkScore):
 
 		# waits for user selection		
 		done = False
@@ -66,4 +66,4 @@ class HumanPlayer:
 					if (gui.place_token(board, self.color)):
 						done = True
 
-			gui.draw_board(board, self.color)
+			gui.draw_board(board, self.color, lightScore, darkScore)
