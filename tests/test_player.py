@@ -15,8 +15,3 @@ class test_computer_player(unittest.TestCase):
 		self.randomComputerPlayer.move(self.board, 
 			self.gui, self.humanPlayer, self.randomComputerPlayer)
 		self.assertNotEqual(Board(6, 7), self.board)
-
-	def test_human_move(self):
-		self.humanPlayer.move(self.board, self.gui, 
-			self.humanPlayer, self.randomComputerPlayer)
-		self.assertNotEqual(Board(6, 7), self.board)
