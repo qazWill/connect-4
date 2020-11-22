@@ -1,4 +1,5 @@
 **TESTING**
+
 To test all, run the following command from parent directory (/connect-4):
 `coverage run -m unittest discover`
 
