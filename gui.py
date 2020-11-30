@@ -61,7 +61,7 @@ class GUI:
 							self.winner = 0
 
 			# draws board and tokens
-			self.draw_board(board, 0, lightScore, darkScore)
+			self.draw_board(board, 0, lightScore, darkScore, False)
 
 			# draws restart button
 			self.screen.blit(self.restart_img, self.restart_rect)
@@ -74,7 +74,7 @@ class GUI:
 		self.back_rect.top = 0
 		self.screen.blit(self.back_img, self.back_rect)
 	
-	def draw_board(self, board, color, lightScore, darkScore):
+	def draw_board(self, board, color, lightScore, darkScore, doFlip=True):
 
 		# erase old screen
 		#self.screen.fill((255,255,255))
@@ -106,6 +106,8 @@ class GUI:
 			winner = "Green Wins!"
 			if self.winner == 2:
 				winner = "Black Wins!"
+			elif self.winner == -1:
+				winner = "It's a Tie!"
 			txt = self.font.render(winner, True, (0, 0, 0))
 			rect = txt.get_rect()
 			rect.centerx = self.screen.get_width() / 2
@@ -131,7 +133,8 @@ class GUI:
 		
 
 		# displays changes
-		pygame.display.flip()
+		if doFlip:
+			pygame.display.flip()
 
 		'''token_rect.left = self.grid_rect.left
 		token_rect.bottom = self.grid_rect.bottom

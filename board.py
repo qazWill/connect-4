@@ -84,5 +84,10 @@ class Board:
             ret = checkConsecutive(aList, 4) # check if aList contains 4 consecutive non-zeroes
             if ret != 0:
                 return ret
-        # Return 0 if no 4-in-a-row found
-        return 0
+		#check for possible move 
+        for row in self.data:
+            for element in row:
+                if element == 0:
+                    return 0			
+		# its a tie if no possible move found
+        return -1 

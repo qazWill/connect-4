@@ -18,7 +18,7 @@ darkScore = 0
 # loop for playing multiple games
 while True:
 
-	print board
+	#print board
 
 	# repeat until winner is found
 	while board.checkWinner() == 0:
@@ -37,9 +37,11 @@ while True:
 	if board.checkWinner() == 1:
 		gui.winner = 1
 		lightScore += 1
-	else:
+	elif board.checkWinner() == 2:
 		gui.winner = 2
 		darkScore += 1
+	else:
+		gui.winner = -1
 
 	# after game is over show end menu
 	# this will have an option to restart or exit
