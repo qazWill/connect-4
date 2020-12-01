@@ -37,6 +37,91 @@ class GUI:
 		self.restart_rect.center = [self.screen.get_width() / 2, self.screen.get_height() / 2]
 
 	# event loop for when game is over	
+	def sel_menu(self):
+
+		options = ['Human', 'Easy AI']
+		light_rect = None 
+		dark_rect = None
+		lightPlayer = 0 # 0 is human 1 is computer
+		darkPlayer = 0 
+
+		# the game loop
+		while True:
+
+			# the event loop
+			for event in pygame.event.get():
+				if event.type == pygame.QUIT:
+					sys.exit()	
+				
+				# mouse click event	drop token
+				if event.type == pygame.MOUSEBUTTONDOWN:
+					x, y = event.pos
+					
+					# check to see if restart button is pressed
+					if x > self.restart_rect.left and x < self.restart_rect.right:
+						if y > self.restart_rect.top and y < self.restart_rect.bottom:
+						
+							# restart the game	
+							return lightPlayer, darkPlayer	
+
+
+					# check to see if light selection is toggled
+					if light_rect != None:
+						if x > light_rect.left and x < light_rect.right:
+							if y > light_rect.top and y < light_rect.bottom:
+								lightPlayer += 1
+								if lightPlayer == 2:
+									lightPlayer = 0
+					
+					# check to see if dark selection is toggled
+					if dark_rect != None:
+						if x > dark_rect.left and x < dark_rect.right:
+							if y > dark_rect.top and y < dark_rect.bottom:
+								darkPlayer += 1
+								if darkPlayer == 2:
+									darkPlayer = 0
+		
+			# clear screen and draw background gradient	
+			self.draw_background()
+
+
+			# draws vs text			
+			txt = self.font.render("VS", True, (0, 0, 0))
+			rect = txt.get_rect()
+			rect.centerx = self.screen.get_width() / 2
+			rect.centery = self.screen.get_height() / 4 
+			self.screen.blit(txt, rect)
+	
+			# shows colors
+			token_rect1 = self.light_token_img.get_rect()
+			token_rect1.right = rect.left - 40
+			token_rect1.bottom = rect.top
+			self.screen.blit(self.light_token_img, token_rect1)
+			token_rect2 = self.light_token_img.get_rect()
+			token_rect2.left = rect.right + 40
+			token_rect2.bottom = rect.top
+			self.screen.blit(self.dark_token_img, token_rect2)
+
+			# draws selection text			
+			txt = self.font.render(options[lightPlayer], True, (0, 255, 0))
+			light_rect = txt.get_rect()
+			light_rect.centerx = token_rect1.centerx
+			light_rect.top = rect.bottom
+			self.screen.blit(txt, light_rect)
+			txt = self.font.render(options[darkPlayer], True, (0, 0, 0))
+			dark_rect = txt.get_rect()
+			dark_rect.centerx = token_rect2.centerx
+			dark_rect.top = rect.bottom
+			self.screen.blit(txt, dark_rect)
+
+			# draws start button (reused restart button
+			self.screen.blit(self.restart_img, self.restart_rect)
+			
+			pygame.display.flip()
+	
+		return 0, 0
+
+	# event loop for when game is over	
 	def end_menu(self, board, lightScore, darkScore):
 
 		# the game loop

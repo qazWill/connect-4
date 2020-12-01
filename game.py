@@ -3,13 +3,26 @@ from board import Board
 from player import * 
 from gui import GUI
 
+def playerSelection(gui):
+
+	lightNum, darkNum = gui.sel_menu()
+	
+	if lightNum == 0:
+		lightPlayer = HumanPlayer(1)
+	elif lightNum == 1:
+		lightPlayer = RandomComputerPlayer(1)
+
+	if darkNum == 0:
+		darkPlayer = HumanPlayer(2)
+	elif darkNum == 1:
+		darkPlayer = RandomComputerPlayer(2)
+	return lightPlayer, darkPlayer
+
 board = Board(6, 7)
 gui = GUI()
 
 # sets up players
-lightPlayer = HumanPlayer(1)
-#darkPlayer = HumanPlayer(2)
-darkPlayer = RandomComputerPlayer(2)
+lightPlayer, darkPlayer = playerSelection(gui)
 player = lightPlayer
 
 lightScore = 0
@@ -52,6 +65,6 @@ while True:
 	board = Board(6, 7)
 	
 	# make new player selections
-	lightPlayer = HumanPlayer(1)
-	darkPlayer = RandomComputerPlayer(2)
+	#lightPlayer = HumanPlayer(1)
+	#darkPlayer = RandomComputerPlayer(2)
 	player = lightPlayer
