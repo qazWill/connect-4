@@ -33,11 +33,11 @@ class Board:
     def allowsMove(self, col):
         # Check bounds
         if col < 0 or col >= self.width:
-            print("Move not allowed: Column", col, "out of Bounds")
+            #print("Move not allowed: Column", col, "out of Bounds")
             return False
         # Check column capacity
         if self.data[0][col] != 0:
-            print("Move not allowed: Column", col, "is full")
+            #print("Move not allowed: Column", col, "is full")
             return False
         return True
 
@@ -53,6 +53,13 @@ class Board:
             return True
         # Token could not be dropped (not allowed)
         return False
+
+    def undoMove(self):
+        col = self.record.pop()
+        for row in range(0, self.height):
+            if self.data[row][col] != 0:
+                self.data[row][col] = 0
+                return
 
     # Returns the token id (int) of winner. 
     # A return value of 0 indicates no win

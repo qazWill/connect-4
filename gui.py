@@ -39,7 +39,7 @@ class GUI:
 	# event loop for when game is over	
 	def sel_menu(self):
 
-		options = ['Human', 'Easy AI']
+		options = ['Human', 'Easy AI', 'Medium AI', 'Hard AI']
 		light_rect = None 
 		dark_rect = None
 		lightPlayer = 0 # 0 is human 1 is computer
@@ -70,7 +70,7 @@ class GUI:
 						if x > light_rect.left and x < light_rect.right:
 							if y > light_rect.top and y < light_rect.bottom:
 								lightPlayer += 1
-								if lightPlayer == 2:
+								if lightPlayer == len(options): 
 									lightPlayer = 0
 					
 					# check to see if dark selection is toggled
@@ -78,7 +78,7 @@ class GUI:
 						if x > dark_rect.left and x < dark_rect.right:
 							if y > dark_rect.top and y < dark_rect.bottom:
 								darkPlayer += 1
-								if darkPlayer == 2:
+								if darkPlayer == len(options):
 									darkPlayer = 0
 		
 			# clear screen and draw background gradient	

@@ -11,11 +11,19 @@ def playerSelection(gui):
 		lightPlayer = HumanPlayer(1)
 	elif lightNum == 1:
 		lightPlayer = RandomComputerPlayer(1)
+	elif lightNum == 2:
+		lightPlayer = HardComputerPlayer(1, 2)
+	else:
+		lightPlayer = HardComputerPlayer(1, 5)
 
 	if darkNum == 0:
 		darkPlayer = HumanPlayer(2)
 	elif darkNum == 1:
 		darkPlayer = RandomComputerPlayer(2)
+	elif darkNum == 2:
+		darkPlayer = HardComputerPlayer(2, 2)
+	else:
+		darkPlayer = HardComputerPlayer(2, 5)
 	return lightPlayer, darkPlayer
 
 board = Board(6, 7)
